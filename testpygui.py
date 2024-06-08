@@ -318,7 +318,7 @@ def OI():
     findAndClick(oi_4_4,2)
     findAndClick(oi_4_4_1,2)
     while has(troll_map):
-        atack(troll_map)
+        atack(troll_map,pr)
     if pr==1:
         return
     while has(elf_map_f):
