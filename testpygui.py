@@ -281,11 +281,15 @@ def OI():
         atack(troll_map,pr)
     if pr==1:
         return
-    while has(elf_map_f):
+    k = 0
+    while has(elf_map_f) and k<2:
+        k = k+1
         atack(elf_map_f,pr)
     if pr==1:
         return
-    while has(elf_map_s):
+    k = 0
+    while has(elf_map_s) and k<2:
+        k=k+1
         atack(elf_map_s,pr)
     if pr==1:
         return
@@ -294,11 +298,15 @@ def OI():
         atack(troll_map,pr)
     if pr==1:
         return
-    while has(elf_map_f):
+    k = 0
+    while has(elf_map_f) and k<2:
+        k=k+1
         atack(elf_map_f,pr)
     if pr==1:
         return
-    while has(elf_map_s):
+    k = 0
+    while has(elf_map_s) and k<2:
+        k=k+1
         atack(elf_map_s,pr)
     if pr==1:
         return
@@ -307,11 +315,15 @@ def OI():
         atack(troll_map,pr)
     if pr==1:
         return
-    while has(elf_map_f):
+    k = 0
+    while has(elf_map_f) and k<2:
+        k=k+1
         atack(elf_map_f,pr)
     if pr==1:
         return
-    while has(elf_map_s):
+    k = 0
+    while has(elf_map_s) and k<2:
+        k=k+1
         atack(elf_map_s,pr)
     if pr==1:
         return
@@ -321,11 +333,15 @@ def OI():
         atack(troll_map,pr)
     if pr==1:
         return
-    while has(elf_map_f):
+    k = 0
+    while has(elf_map_f) and k<2:
+        k=k+1
         atack(elf_map_f,pr)
     if pr==1:
         return
-    while has(elf_map_s):
+    k = 0
+    while has(elf_map_s) and k<2:
+        k=k+1
         atack(elf_map_s,pr)
     if pr==1:
         return
