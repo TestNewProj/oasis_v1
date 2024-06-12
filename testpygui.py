@@ -86,6 +86,7 @@ def findAndClick(target,wait=0.4):
     try:
         pos = pg.center(pg.locateOnScreen(target,confidence=0.8))
         pg.moveTo(pos[0],pos[1])
+        time.sleep(.1)
         pg.click()
         time.sleep(wait)
     except:
@@ -140,12 +141,11 @@ def castMagic():
         if has(boost):
             findAndClick(choice)
         elif has(boost_unact):
-            findAndClick(boost_unact)
+            findAndClick(boost_unact,0.5)
             findAndClick(choice)
         else:
             print('magic is over')
             sys.exit()
-
         findAndClick(action)
         findAndClick(mag)
         while has(pointer)!=1:
@@ -281,70 +281,70 @@ def OI():
         atack(troll_map,pr)
     if pr==1:
         return
-    k = 0
-    while has(elf_map_f) and k<2:
-        k = k+1
-        atack(elf_map_f,pr)
-    if pr==1:
-        return
-    k = 0
-    while has(elf_map_s) and k<2:
-        k=k+1
-        atack(elf_map_s,pr)
-    if pr==1:
-        return
+    # k = 0
+    # while has(elf_map_f) and k<2:
+    #     k = k+1
+    #     atack(elf_map_f,pr)
+    # if pr==1:
+    #     return
+    # k = 0
+    # while has(elf_map_s) and k<2:
+    #     k=k+1
+    #     atack(elf_map_s,pr)
+    # if pr==1:
+    #     return
     findAndClick(oi_4_2,2)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    k = 0
-    while has(elf_map_f) and k<2:
-        k=k+1
-        atack(elf_map_f,pr)
-    if pr==1:
-        return
-    k = 0
-    while has(elf_map_s) and k<2:
-        k=k+1
-        atack(elf_map_s,pr)
-    if pr==1:
-        return
+    # k = 0
+    # while has(elf_map_f) and k<2:
+    #     k=k+1
+    #     atack(elf_map_f,pr)
+    # if pr==1:
+    #     return
+    # k = 0
+    # while has(elf_map_s) and k<2:
+    #     k=k+1
+    #     atack(elf_map_s,pr)
+    # if pr==1:
+    #     return
     findAndClick(oi_4_3,2)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    k = 0
-    while has(elf_map_f) and k<2:
-        k=k+1
-        atack(elf_map_f,pr)
-    if pr==1:
-        return
-    k = 0
-    while has(elf_map_s) and k<2:
-        k=k+1
-        atack(elf_map_s,pr)
-    if pr==1:
-        return
+    # k = 0
+    # while has(elf_map_f) and k<2:
+    #     k=k+1
+    #     atack(elf_map_f,pr)
+    # if pr==1:
+    #     return
+    # k = 0
+    # while has(elf_map_s) and k<2:
+    #     k=k+1
+    #     atack(elf_map_s,pr)
+    # if pr==1:
+    #     return
     findAndClick(oi_4_4,2)
     findAndClick(oi_4_4_1,2)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    k = 0
-    while has(elf_map_f) and k<2:
-        k=k+1
-        atack(elf_map_f,pr)
-    if pr==1:
-        return
-    k = 0
-    while has(elf_map_s) and k<2:
-        k=k+1
-        atack(elf_map_s,pr)
-    if pr==1:
-        return
+    # k = 0
+    # while has(elf_map_f) and k<2:
+    #     k=k+1
+    #     atack(elf_map_f,pr)
+    # if pr==1:
+    #     return
+    # k = 0
+    # while has(elf_map_s) and k<2:
+    #     k=k+1
+    #     atack(elf_map_s,pr)
+    # if pr==1:
+    #     return
     findAndClick(oi_4_5,1.5)
     findAndClick(oi_4_tp,1.5)
     while (has(oasis)):
