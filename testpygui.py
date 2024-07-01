@@ -66,6 +66,15 @@ choice = 'templates/choice.png'
 annonce = 'templates/annonce.png'
 yes = 'templates/yes.png'
 centr = 'templates/centr.png'
+
+
+rg_fight = (800,360,300,290)
+rg_time = (40,25,900,30)
+rg_annonce = (20,150,570,470)
+rg_menu = (600,950,745,100)
+rg_pannel = (45,1040,870,40)
+rg_attack = (570,790,388,64)
+
 #функция завершения программы
 def hook(pid):
     while True:
@@ -75,35 +84,39 @@ def hook(pid):
 
 
 
-def has(target):
+def has(target,rg=None):
     try:
-        pg.center(pg.locateOnScreen(target,confidence=0.8))
+        pg.center(pg.locateOnScreen(target,confidence=0.8,region=rg,grayscale=True))
         return 1
     except:
         return 0
 
-def findAndClick(target,wait=0.4):
+def findAndClick(target,wait=0.01, rg=None):
     try:
-        pos = pg.center(pg.locateOnScreen(target,confidence=0.8))
+        # st_time = time.time()
+        pos = pg.center(pg.locateOnScreen(target,confidence=0.8, region=rg,grayscale=True))
         pg.moveTo(pos[0],pos[1])
-        time.sleep(.1)
         pg.click()
         time.sleep(wait)
+        # end_time = time.time()
+        # print(end_time-st_time)
     except:
         print('cannot find ' + str(target))
 
 def hit(enemy):
     try:
+
+        
         m=10000
         i = 0
-        pos_pointer= pg.locateCenterOnScreen(pointer, confidence=0.8)
-        all_enemy = list(pg.locateAllOnScreen(enemy, confidence=0.8))
+        pos_pointer= pg.locateCenterOnScreen(pointer, confidence=0.8,region=rg_fight,grayscale=True)
+        all_enemy = list(pg.locateAllOnScreen(enemy, confidence=0.8,region=rg_fight,grayscale=True))
+        closest=i
         for pos_enemy in all_enemy:
             if m > math.fabs(pos_enemy[0]-pos_pointer[0])+math.fabs(pos_enemy[1]-pos_pointer[1]):
-                m = min(m, math.fabs(pos_enemy[0]-pos_pointer[0])+math.fabs(pos_enemy[1]-pos_pointer[1]))
+                m = math.fabs(pos_enemy[0]-pos_pointer[0])+math.fabs(pos_enemy[1]-pos_pointer[1])
                 closest=i
-            else:
-                i=i+1
+            i=i+1
         pg.moveTo(all_enemy[closest][0]+15,all_enemy[closest][1]+15)
         pg.click()
         time.sleep(0.3)
@@ -116,12 +129,12 @@ def fight(enemy):
     while True:
         try:
             pg.locateOnScreen(time_fight,confidence=0.8) #пока на экране есть таймер
-            if (k==0 and has(pointer)):
+            if (k==0 and has(pointer,rg_fight)):
                 castMagic()
                 k = k+1
 
-            while has(annonce)!=1:
-                if (has(pointer)):
+            while has(annonce,rg_annonce)!=1:
+                if (has(pointer,rg_fight)):
                     hit(enemy)
                 else:
                     time.sleep(.3)
@@ -135,21 +148,15 @@ def fight(enemy):
 
 def castMagic():
     try:
-        findAndClick(menu)
-        findAndClick(magic)
-
-        if has(boost):
-            findAndClick(choice)
-        elif has(boost_unact):
-            findAndClick(boost_unact,0.5)
-            findAndClick(choice)
-        else:
-            print('magic is over')
-            sys.exit()
-        findAndClick(action)
-        findAndClick(mag)
-        while has(pointer)!=1:
-            time.sleep(.3)
+        findAndClick(menu,rg=rg_menu)
+        pg.moveTo(1160,640)
+        pg.click()
+        time.sleep(.2)
+        pg.press('enter',2,.2)
+        pg.press('up')
+        pg.press('enter')
+        while has(pointer,rg_fight)==0:
+            time.sleep(.2)
     except Exception as err:
         print(err)
 
@@ -174,26 +181,27 @@ def reOpen():
     findAndClick(game_close)
     time.sleep(.4)
     findAndClick(game_open)
-    time.sleep(5)
+    while has(game_play)!=1:
+        time.sleep(1.5)
     findAndClick(game_fullscreen)
     time.sleep(.4)
     findAndClick(game_play)
     time.sleep(.4)
     while has(oasis):
-        time.sleep(3)
-    while has(close):
-        findAndClick(close)
+        time.sleep(1)
+    while has(close,rg_menu):
+        findAndClick(close,rg=rg_menu)
         time.sleep(1)
     
         
 
-def atack(enemy,proverka):
+def atack(enemy,proverka,rgg=None):
     
-    findAndClick(enemy)
-    if has(attack):
-        findAndClick(attack)
-        while (has(health)==0) and (has(must_not)==0):
-                time.sleep(.4)  
+    findAndClick(enemy,rg=rgg)
+    if has(attack,rg=rg_attack):
+        findAndClick(attack,rg=rg_attack)
+        while (has(health,rg_time)==0) and (has(must_not)==0):
+                time.sleep(.2)  
 
         if enemy == troll_map:
                 enemy = troll_fight
@@ -201,23 +209,35 @@ def atack(enemy,proverka):
                 enemy = elf_fight
 
     try: 
-        pg.center(pg.locateOnScreen('templates/health.png',confidence=0.8))
-        while (has(pointer)==0):
-            time.sleep(.4)
+        pg.center(pg.locateOnScreen('templates/health.png',confidence=0.8,region=rg_time))
+        while (has(pointer,rg_fight)==0):
+            time.sleep(.2)
         fight(enemy)
-        time.sleep(.4)
-        if has(no_exp):
+        time.sleep(.2)
+        if has(no_exp,rg_annonce):
             proverka=1
-        findAndClick(close)
+        findAndClick(close,rg=rg_menu)
         lvlUp(settings.xar)
         if proverka == 1:
             reOpen()
             
     except:
-        findAndClick(close)
+        findAndClick(close,rg=rg_menu)
 
+nim_1 = 'templates/nim_1.png'
+rg_nim = (700,160,690,640)
 
-
+def nim():
+    pr = 0
+    findAndClick(menu,rg=rg_menu)
+    findAndClick(centr)
+    k=0
+    while has(troll_map,rg_nim):
+        atack(troll_map,pr,rg_nim)
+        k=k+1
+    if pr==1:
+        return
+    #findAndClick(nim_1,2)
 
 
 
@@ -227,18 +247,18 @@ def OI():
     pr = 0
     findAndClick(menu)
     findAndClick(centr)
-    findAndClick(oi_1_1,2)
+    findAndClick(oi_1_1,1)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    findAndClick(oi_1_2_0,2)
+    findAndClick(oi_1_2_0,1)
     findAndClick(oi_1_2_1,1)
-    findAndClick(oi_1_2,3)
-    findAndClick(oi_1_3,2)
-    findAndClick(oi_1_tp,1.5)
+    findAndClick(oi_1_2,2)
+    findAndClick(oi_1_3,1)
+    findAndClick(oi_1_tp,1)
     while (has(oasis)):
-        time.sleep(2)
+        time.sleep(1)
 
     while has(troll_map):
         atack(troll_map,pr)
@@ -252,23 +272,23 @@ def OI():
         atack(troll_map,pr)
     if pr==1:
         return
-    findAndClick(oi_3_1,1.5)
+    findAndClick(oi_3_1,1)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    findAndClick(oi_3_2,1.5)
+    findAndClick(oi_3_2,1)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    findAndClick(oi_3_3,1.5)
+    findAndClick(oi_3_3,1)
     while has(troll_map):
         atack(troll_map,pr)
     if pr==1:
         return
-    findAndClick(oi_3_4,2)
-    findAndClick(oi_3_tp,1.5)
+    findAndClick(oi_3_4,1)
+    findAndClick(oi_3_tp,1)
     while (has(oasis)):
         time.sleep(2)
 
@@ -279,80 +299,13 @@ def OI():
     findAndClick(oi_4_1,2)
     while has(troll_map):
         atack(troll_map,pr)
-    if pr==1:
-        return
-    # k = 0
-    # while has(elf_map_f) and k<2:
-    #     k = k+1
-    #     atack(elf_map_f,pr)
-    # if pr==1:
-    #     return
-    # k = 0
-    # while has(elf_map_s) and k<2:
-    #     k=k+1
-    #     atack(elf_map_s,pr)
-    # if pr==1:
-    #     return
-    findAndClick(oi_4_2,2)
-    while has(troll_map):
-        atack(troll_map,pr)
-    if pr==1:
-        return
-    # k = 0
-    # while has(elf_map_f) and k<2:
-    #     k=k+1
-    #     atack(elf_map_f,pr)
-    # if pr==1:
-    #     return
-    # k = 0
-    # while has(elf_map_s) and k<2:
-    #     k=k+1
-    #     atack(elf_map_s,pr)
-    # if pr==1:
-    #     return
-    findAndClick(oi_4_3,2)
-    while has(troll_map):
-        atack(troll_map,pr)
-    if pr==1:
-        return
-    # k = 0
-    # while has(elf_map_f) and k<2:
-    #     k=k+1
-    #     atack(elf_map_f,pr)
-    # if pr==1:
-    #     return
-    # k = 0
-    # while has(elf_map_s) and k<2:
-    #     k=k+1
-    #     atack(elf_map_s,pr)
-    # if pr==1:
-    #     return
-    findAndClick(oi_4_4,2)
-    findAndClick(oi_4_4_1,2)
-    while has(troll_map):
-        atack(troll_map,pr)
-    if pr==1:
-        return
-    # k = 0
-    # while has(elf_map_f) and k<2:
-    #     k=k+1
-    #     atack(elf_map_f,pr)
-    # if pr==1:
-    #     return
-    # k = 0
-    # while has(elf_map_s) and k<2:
-    #     k=k+1
-    #     atack(elf_map_s,pr)
-    # if pr==1:
-    #     return
-    findAndClick(oi_4_5,1.5)
-    findAndClick(oi_4_tp,1.5)
-    while (has(oasis)):
-        time.sleep(2)
-    findAndClick(oi_final,2.5)
 
-
-
+    # =========
+    reOpen()
+    pr=1
+    # =========
+    if pr==1:
+        return
 
 
 
@@ -362,11 +315,14 @@ def OI():
 #     while True:
 #         OI()
      
+
+
 if __name__ == '__main__':
     pid = os.getpid()
     multiprocessing.Process(target=hook,args=[pid]).start()
     
     while True:
         OI()
+        # nim()
     
     
